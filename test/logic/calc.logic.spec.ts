@@ -1,3 +1,5 @@
+import 'jest';
+
 import { AttendVO } from '../../src/vo/attend.vo';
 import { CalcLogic } from '../../src/logic/calc.logic';
 
