@@ -49,5 +49,9 @@
       "json",
       "node"
     ]
+  },
+  "dependencies": {
+    "inversify": "^4.13.0",
+    "reflect-metadata": "^0.1.12"
   }
 }
