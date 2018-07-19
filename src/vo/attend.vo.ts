@@ -8,4 +8,6 @@ export class AttendVO {
   end: Date;
   /** 休憩時間(昼休みを含む) */
   rest: number;
+  /** 労働時間 */
+  work: number;
 }

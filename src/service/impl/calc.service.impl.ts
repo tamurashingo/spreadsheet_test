@@ -1,13 +1,14 @@
-import { injectable, inject } from "inversify";
+import { inject, injectable } from "inversify";
+import { CalcLogic } from '../../logic/calc.logic';
 
 @injectable()
 export class CalcServiceImpl implements CalcService {
-  private calcDAO: CalcDAO;
-
+  private calcLogic: CalcLogic;
+  
   constructor(
-    @inject(Symbol.for("CalcDAO")) calcDAO: CalcDAO
+    @inject(Symbol.for("CalcLogic")) calcLogic: CalcLogic
   ) {
-    this.calcDAO = calcDAO;
+    this.calcLogic = calcLogic;
   }
 
   calcAll(): void {
