@@ -1,31 +1,27 @@
-import { inject, injectable } from 'inversify';
-
 import { AttendVO } from '../../vo/attend.vo';
+import { AttendDAO } from '../../repository/attend.dao';
 import { CalcLogic } from '../calc.logic';
-import { CalcDAO } from '../../repository/calc.dao';
 
-import 'reflect-metadata';
-
-@injectable()
 export class CalcLogicImpl implements CalcLogic {
-  private calcDAO: CalcDAO;
+  private attendDAO: AttendDAO;
 
-  constructor(
-    @inject(Symbol.for("CalcDAO")) calcDAO: CalcDAO
-  ) {
-    this.calcDAO = calcDAO;
+  constructor(attendDAO: AttendDAO) {
+    this.attendDAO = attendDAO;
   }
 
-  calc(attend: AttendVO): number {
-    return (((attend.end.getTime() - attend.start.getTime()) / 1000) / 60 / 60) - attend.rest;
+  calc(attend: AttendVO): AttendVO {
+    var worktime = (((attend.end.getTime() - attend.start.getTime()) / 1000) / 60 / 60) - attend.rest;
+    var result = AttendVO.copy(attend);
+    result.work = worktime;
+    return result;
   }
 
-  readAllAttends(): AttendVO[] {
-    return this.calcDAO.readAllAttends();
+  getAllAttends(): AttendVO[] {
+    return this.attendDAO.selectAllAttends();
   }
 
-  saveAttend(attendVO: AttendVO): void {
-
+  save(attendVO: AttendVO): void {
+    this.attendDAO.update(attendVO);
   }
 
 }
