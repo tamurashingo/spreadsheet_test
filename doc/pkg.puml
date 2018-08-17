@@ -1,0 +1,63 @@
+@startuml
+
+class CalcController {
+  calcService: CalcService
+  calcAll(): void
+}
+
+CalcController .right.> CalcService: <<call>>
+
+interface CalcService {
+  calcAll(): void
+}
+
+class CalcServiceImpl implements CalcService {
+  calcLogic: CalcLogic
+  calcAll(): void
+}
+
+CalcServiceImpl .right.> CalcLogic: <<call>>
+CalcServiceImpl ..> AttendVO: <<use>>
+
+
+interface CalcLogic {
+  calc(attendVO: AttendVO): AttendVO
+  getAllAttends(): AttendVO[]
+  save(attendVO: AttendVO): void
+}
+
+class CalcLogicImpl implements CalcLogic {
+  attendDAO: AttendDAO
+  calc(attendVO: AttendVO): AttendVO
+  getAllAttends(): AttendVO[]
+  save(attendVO: AttendVO): void
+}
+
+CalcLogicImpl .right.> AttendDAO: <<call>>
+CalcLogicImpl ..> AttendVO: <<use>>
+
+interface AttendDAO {
+  selectAllAttends(): AttendVO[]
+  update(attendVO: AttendVO): void
+}
+
+class AttendDAOImpl implements AttendDAO {
+  selectAllAttends(): AttendVO[]
+  update(attendVO: AttendVO): void
+}
+
+AttendDAOImpl ..> AttendVO: <<use>>
+
+abstract class SpreadsheetVO {
+  rowId: number
+}
+
+class AttendVO extends SpreadsheetVO {
+  start: Date
+  end: Date
+  rest: number
+  work: number
+  static copy(src: AttendVO): AttendVO
+}
+
+@enduml

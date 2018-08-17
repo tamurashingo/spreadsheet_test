@@ -1,0 +1,50 @@
+@startuml
+
+hide footbox
+
+participant Menu
+participant CalcController
+participant CalcService
+participant CalcLogic
+participant AttendDAO
+participant AttendVO
+participant Spreadsheet
+
+Menu -> CalcController :calc
+activate CalcController
+
+CalcController -> CalcService :calcAll
+activate CalcService
+
+CalcService -> CalcLogic :getAllAttends
+activate CalcLogic
+
+CalcLogic -> AttendDAO :selectAllAttends
+activate AttendDAO
+
+AttendDAO -> Spreadsheet :getRange
+
+loop for each row
+  AttendDAO -> AttendVO :new
+  activate AttendVO
+  deactivate AttendVO
+end
+
+
+CalcLogic <-- AttendDAO :AttendVO[]
+
+CalcService <-- CalcLogic :AttendVO[]
+
+loop for each AttendVO
+  CalcService -> CalcLogic :calc
+  CalcLogic -> AttendVO :copy
+  activate AttendVO
+  deactivate AttendVO
+  CalcService <-- CalcLogic :AttendVO
+  CalcService -> CalcLogic :save
+  CalcLogic -> AttendDAO :update
+  AttendDAO -> Spreadsheet :setValue
+
+end
+
+@enduml
